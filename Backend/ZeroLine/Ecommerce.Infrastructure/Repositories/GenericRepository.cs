@@ -3,14 +3,15 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using ZeroLine.Core.Interfaces;
+using ZeroLine.Infrastructure.Data;
 
 namespace ZeroLine.Infrastructure.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly DbContext _context;    
+        protected readonly AppDbContext _context;    
 
-        public GenericRepository(DbContext context)
+        public GenericRepository(AppDbContext context)
         {
             _context = context;
         }

@@ -11,11 +11,11 @@ namespace ZeroLine.Infrastructure.Data.Config
         {
             builder.Property(x => x.Name).IsRequired();
             builder.Property(x =>x.Description).IsRequired();
-            builder.Property(x => x.Price).HasColumnType("decimal(18,2)");
+            builder.Property(x => x.NewPrice).HasColumnType("decimal(18,2)");
             builder.HasData(
                 new Product
                 {
-                    Id = 1,Name = "Test Product", Description = "This is a test product",Price = 19.99m, CategoryId = 1 
+                    Id = 1,Name = "Test Product", Description = "This is a test product",NewPrice = 19.99m, CategoryId = 1 
                 }
             );
         }

@@ -1,5 +1,6 @@
 
 using ZeroLine.Infrastructure;
+using AutoMapper;
 
 namespace ZeroLine.API
 {
@@ -14,11 +15,18 @@ namespace ZeroLine.API
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+            builder.Services.AddSwaggerGen();
 
             builder.Services.InfrastructureConfiguration(builder.Configuration);
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             var app = builder.Build();
 
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -31,7 +39,6 @@ namespace ZeroLine.API
 
 
             app.MapControllers();
-
             app.Run();
         }
     }
