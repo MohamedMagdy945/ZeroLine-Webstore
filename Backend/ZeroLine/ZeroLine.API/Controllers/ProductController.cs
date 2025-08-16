@@ -14,7 +14,7 @@ namespace ZeroLine.API.Controllers
         {
         }
 
-        [HttpGet("get-all")]
+        [HttpGet("Get-All")]
         public async Task<IActionResult> get()
         {
             try
@@ -35,7 +35,7 @@ namespace ZeroLine.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("get-by-id/{id}")]
+        [HttpGet("Get-By-Id/{id}")]
         public async Task<IActionResult> getById(int id)
         {
             try
@@ -51,7 +51,7 @@ namespace ZeroLine.API.Controllers
             }
         }
 
-        [HttpPost("add-product")]
+        [HttpPost("Add-Product")]
         public async Task<IActionResult> add(AddProductDto productDto)
         {
             try
@@ -65,13 +65,28 @@ namespace ZeroLine.API.Controllers
             }
         }
 
-        [HttpPut("update-product")]
+        [HttpPut("Update-Product")]
         public async Task<IActionResult> Update(UpdateProductDto productDto)
         {
             try
             {
                 await unOfWork.ProductRepository.UpdateAsync(productDto);
                 return Ok(new ResponseAPI(200, "Product Updated Successfully"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseAPI(400, ex.Message));
+            }
+        }
+        [HttpDelete("Delete-Product/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var product = await unOfWork.ProductRepository.GetByIdAsync(id);
+                if (product is null) return BadRequest(new ResponseAPI(400, $"not found product id= {id}"));
+                await unOfWork.ProductRepository.DeleteAsync(product);
+                return Ok(new ResponseAPI(200, "Product Deleted Successfully"));
             }
             catch (Exception ex)
             {

@@ -1,6 +1,7 @@
 
 using ZeroLine.Infrastructure;
 using AutoMapper;
+using ZeroLine.API.Middleware;
 
 namespace ZeroLine.API
 {
@@ -19,20 +20,17 @@ namespace ZeroLine.API
 
             builder.Services.InfrastructureConfiguration(builder.Configuration);
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+            builder.Services.AddMemoryCache();
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
             {
+                app.MapOpenApi();
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.MapOpenApi();
-            }
-
+            app.UseMiddleware<ExceptionsMiddleware>();
+            app.UseStatusCodePagesWithReExecute("/errors/{0}");
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

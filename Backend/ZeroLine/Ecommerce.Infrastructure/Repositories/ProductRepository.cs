@@ -40,7 +40,6 @@ namespace ZeroLine.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
-
         public async Task<bool> UpdateAsync(UpdateProductDto productDto)
         {
             if (productDto == null)
@@ -70,8 +69,17 @@ namespace ZeroLine.Infrastructure.Repositories
             await _context.Photos.AddRangeAsync(photos);
             await _context.SaveChangesAsync();
             return true;
+        }
+        public async Task DeleteAsync(Product product)
+        {
+            var photo = await _context.Photos.Where(m => m.ProductId == product.Id).ToListAsync();
 
-
+            foreach (var item in photo)
+            {
+                await imageManagmentService.DeleteImageAsync(item.ImageName);
+            }
+            _context.Products.Remove(product);
+            _context.SaveChanges();
         }
     }
    
